@@ -23,14 +23,14 @@ function FuncComp(props) {
     // 랜더링이 실해되고 나서 호출 (매번)
     // side effect
     useEffect(function () {
-        console.log('%cfunc(A) => useEffect (componentDidMount & componentDidUpdate) ' + (++funcId), funcStyle);
+        console.log('%cfunc => useEffect (componentDidMount & componentDidUpdate) ' + (++funcId), funcStyle);
         document.title = number + ' : ' + date;
-    });
 
-    // 여러개도 가능
-    useEffect(function () {
-        console.log('%cfunc(B) => useEffect (componentDidMount & componentDidUpdate) ' + (++funcId), funcStyle);
-        document.title = number + ' : ' + date;
+        // clean up
+        // render 후, useEffect 가 실행되기 전에 처리할 작업들을 정의
+        return function () {
+            console.log('%cfunc => useEffect return (componentDidMount & componentDidUpdate) ' + (++funcId), funcStyle)
+        }
     });
 
     console.log('%cfunc => render ' + (++funcId), funcStyle);

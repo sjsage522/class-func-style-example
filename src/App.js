@@ -20,18 +20,38 @@ function FuncComp(props) {
 
     const [date, setDate] = useState(new Date().toString()); /* destructuring assignment */
 
+    // 두 번째 인자로 [](빈 배열)을 주게 되면,
+    // componentDidMount 와 같은 효과를 가질 수 있다. (처음 렌더링 되고나서 한번 호출되고, 그 이후 업데이트될 때는 호출x)
+    useEffect(function () {
+        console.log('%cfunc => useEffect (componentDidMount) ' + (++funcId), funcStyle);
+
+        return function () {//
+            console.log('%cfunc => useEffect return (componentWillUnMount) ' + (++funcId), funcStyle)
+        }
+    }, []);
+
     // 랜더링이 실해되고 나서 호출 (매번)
     // side effect
     useEffect(function () {
-        console.log('%cfunc => useEffect (componentDidMount & componentDidUpdate) ' + (++funcId), funcStyle);
-        document.title = number + ' : ' + date;
+        console.log('%cfunc => useEffect number (componentDidMount & componentDidUpdate) ' + (++funcId), funcStyle);
+        document.title = number;
 
         // clean up
-        // render 후, useEffect 가 실행되기 전에 처리할 작업들을 정의
+        // render 후, useEffect 가 실행되기 전에 처리할 작업들을 정의 (즉, 이전의 useEffect 를 정리(clean-up))
         return function () {
-            console.log('%cfunc => useEffect return (componentDidMount & componentDidUpdate) ' + (++funcId), funcStyle)
+            console.log('%cfunc => useEffect number return (componentDidMount & componentDidUpdate) ' + (++funcId), funcStyle)
         }
-    });
+    }, [number]);
+
+    // 두번째 인자로 상태값을 주게되면, 해당 상태가 변경되었을 경우에만 useEffect 가 호출된다.
+    useEffect(function () {
+        console.log('%cfunc => useEffect date (componentDidMount & componentDidUpdate) ' + (++funcId), funcStyle);
+        document.title = date;
+
+        return function () {
+            console.log('%cfunc => useEffect date return (componentDidMount & componentDidUpdate) ' + (++funcId), funcStyle)
+        }
+    }, [date]);
 
     console.log('%cfunc => render ' + (++funcId), funcStyle);
     return (

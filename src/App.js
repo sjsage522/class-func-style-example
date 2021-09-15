@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 
 function App() {
@@ -11,6 +11,8 @@ function App() {
     );
 }
 
+const funcStyle = 'color:grey';
+let funcId = 0;
 function FuncComp(props) {
     const numberState = useState(props.initNumber);
     let number = numberState[0]; /* state */
@@ -18,8 +20,20 @@ function FuncComp(props) {
 
     const [date, setDate] = useState(new Date().toString()); /* destructuring assignment */
 
-    console.log('numberState', numberState); /* Array(2) */
+    // 랜더링이 실해되고 나서 호출 (매번)
+    // side effect
+    useEffect(function () {
+        console.log('%cfunc(A) => useEffect (componentDidMount & componentDidUpdate) ' + (++funcId), funcStyle);
+        document.title = number + ' : ' + date;
+    });
 
+    // 여러개도 가능
+    useEffect(function () {
+        console.log('%cfunc(B) => useEffect (componentDidMount & componentDidUpdate) ' + (++funcId), funcStyle);
+        document.title = number + ' : ' + date;
+    });
+
+    console.log('%cfunc => render ' + (++funcId), funcStyle);
     return (
         <div className="container">
             <h2>function style component</h2>
